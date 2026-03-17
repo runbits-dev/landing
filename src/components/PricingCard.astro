@@ -1,0 +1,61 @@
+---
+interface Props {
+  name: string;
+  price: number;
+  description: string;
+  volume: string;
+  features: string[];
+  popular?: boolean;
+  isFleet?: boolean;
+  cta: string;
+  trialNote: string;
+  perMonth: string;
+}
+const { name, price, description, volume, features, popular, isFleet, cta, trialNote, perMonth } = Astro.props;
+---
+
+<div class={`relative rounded-2xl p-8 flex flex-col ${
+  popular ? 'bg-brand-600 text-white ring-4 ring-brand-400 scale-105'
+  : isFleet ? 'bg-gray-900 text-white'
+  : 'bg-white border border-gray-200'
+}`}>
+  {popular && (
+    <div class="absolute -top-4 left-1/2 -translate-x-1/2">
+      <span class="bg-yellow-400 text-yellow-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">
+        ⭐ Más popular
+      </span>
+    </div>
+  )}
+  <div class="mb-6">
+    <h3 class="text-xl font-bold mb-1">{name}</h3>
+    <p class={`text-sm ${popular || isFleet ? 'opacity-80' : 'text-gray-500'}`}>{description}</p>
+  </div>
+  <div class="mb-6">
+    <div class="flex items-end gap-1">
+      <span class="text-5xl font-black">${price}</span>
+      <span class={`text-sm mb-2 ${popular || isFleet ? 'opacity-70' : 'text-gray-400'}`}>{perMonth}</span>
+    </div>
+    <p class={`text-xs mt-1 ${popular || isFleet ? 'opacity-70' : 'text-gray-400'}`}>{volume}</p>
+  </div>
+  <ul class="space-y-3 mb-8 flex-1">
+    {features.map(f => (
+      <li class="flex items-start gap-2 text-sm">
+        <span class={`mt-0.5 flex-shrink-0 ${popular ? 'text-brand-200' : isFleet ? 'text-brand-400' : 'text-brand-500'}`}>✓</span>
+        <span class={popular || isFleet ? 'opacity-90' : 'text-gray-600'}>{f}</span>
+      </li>
+    ))}
+  </ul>
+  <div>
+    <a
+      href="https://app.runbits.io/register"
+      class={`block w-full text-center py-3 px-6 rounded-xl font-semibold transition-all ${
+        popular ? 'bg-white text-brand-700 hover:bg-brand-50'
+        : isFleet ? 'bg-brand-500 text-white hover:bg-brand-400'
+        : 'bg-brand-600 text-white hover:bg-brand-700'
+      }`}
+    >
+      {cta}
+    </a>
+    <p class={`text-xs text-center mt-2 ${popular || isFleet ? 'opacity-60' : 'text-gray-400'}`}>{trialNote}</p>
+  </div>
+</div>

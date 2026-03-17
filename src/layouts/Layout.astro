@@ -1,0 +1,91 @@
+---
+import type { Locale } from '../i18n';
+import { t } from '../i18n';
+
+interface Props {
+  title: string;
+  locale: Locale;
+  description?: string;
+}
+
+const { title, locale, description = 'Runbits — Tu delivery, tus reglas.' } = Astro.props;
+const tr = t(locale);
+const localeUrls: Record<Locale, string> = { es: '/', en: '/en', pt: '/pt' };
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="bg-gray-50 font-sans antialiased">
+    <nav class="fixed top-0 inset-x-0 z-50 bg-white/80 backdrop-blur border-b border-gray-100">
+      <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
+        <a href={localeUrls[locale]} class="flex items-center gap-2">
+          <span class="text-2xl font-black text-brand-600">runbits</span>
+          <span class="text-xs bg-brand-100 text-brand-700 px-2 py-0.5 rounded-full font-medium">beta</span>
+        </a>
+        <div class="hidden md:flex items-center gap-8">
+          <a href={`${localeUrls[locale]}#pricing`} class="text-sm text-gray-600 hover:text-gray-900">{tr.nav.pricing}</a>
+          <a href={`${localeUrls[locale]}#calculator`} class="text-sm text-gray-600 hover:text-gray-900">{tr.nav.calculator}</a>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="hidden md:flex items-center gap-1 text-xs">
+            {Object.entries(localeUrls).map(([l, url]) => (
+              <a href={url} class={`px-2 py-1 rounded font-medium uppercase ${
+                l === locale ? 'bg-brand-100 text-brand-700' : 'text-gray-400 hover:text-gray-600'
+              }`}>{l}</a>
+            ))}
+          </div>
+          <a href="https://app.runbits.io/register" class="bg-brand-600 text-white text-sm font-semibold px-4 py-2 rounded-lg hover:bg-brand-700 transition-colors">
+            {tr.nav.cta}
+          </a>
+        </div>
+      </div>
+    </nav>
+    <main class="pt-16"><slot /></main>
+    <footer class="bg-gray-900 text-gray-400 py-16 mt-24">
+      <div class="max-w-6xl mx-auto px-4">
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
+          <div class="col-span-2 md:col-span-1">
+            <span class="text-2xl font-black text-white">runbits</span>
+            <p class="text-sm mt-2">{tr.footer.tagline}</p>
+          </div>
+          <div>
+            <h4 class="text-white font-semibold mb-3 text-sm">{tr.footer.product}</h4>
+            <ul class="space-y-2 text-sm">
+              <li><a href="#" class="hover:text-white">{tr.footer.links.features}</a></li>
+              <li><a href="#pricing" class="hover:text-white">{tr.footer.links.pricing}</a></li>
+              <li><a href="#" class="hover:text-white">{tr.footer.links.changelog}</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-white font-semibold mb-3 text-sm">{tr.footer.company}</h4>
+            <ul class="space-y-2 text-sm">
+              <li><a href="#" class="hover:text-white">{tr.footer.links.about}</a></li>
+              <li><a href="#" class="hover:text-white">{tr.footer.links.blog}</a></li>
+              <li><a href="#" class="hover:text-white">{tr.footer.links.contact}</a></li>
+            </ul>
+          </div>
+          <div>
+            <h4 class="text-white font-semibold mb-3 text-sm">{tr.footer.legal}</h4>
+            <ul class="space-y-2 text-sm">
+              <li><a href="#" class="hover:text-white">{tr.footer.links.privacy}</a></li>
+              <li><a href="#" class="hover:text-white">{tr.footer.links.terms}</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="border-t border-gray-800 pt-8 text-sm text-center">
+          &copy; {new Date().getFullYear()} Runbits. {tr.footer.rights}
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>
