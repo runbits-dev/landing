@@ -14,23 +14,27 @@ test.describe('Pricing section', () => {
   });
 
   test('Starter plan is visible with correct price', async ({ page }) => {
-    await expect(page.getByText('Starter').first()).toBeVisible();
-    await expect(page.getByText('$49').first()).toBeVisible();
+    const pricing = page.locator('#pricing');
+    await expect(pricing.getByText('Starter').first()).toBeVisible();
+    await expect(pricing.getByText('$49').first()).toBeVisible();
   });
 
   test('Growth plan is visible with correct price', async ({ page }) => {
-    await expect(page.getByText('Growth').first()).toBeVisible();
-    await expect(page.getByText('$129').first()).toBeVisible();
+    const pricing = page.locator('#pricing');
+    await expect(pricing.getByText('Growth').first()).toBeVisible();
+    await expect(pricing.getByText('$129').first()).toBeVisible();
   });
 
   test('Pro plan is visible with correct price', async ({ page }) => {
-    await expect(page.getByText('Pro').first()).toBeVisible();
-    await expect(page.getByText('$299').first()).toBeVisible();
+    const pricing = page.locator('#pricing');
+    await expect(pricing.getByText('Pro').first()).toBeVisible();
+    await expect(pricing.getByText('$299').first()).toBeVisible();
   });
 
   test('Fleet plan is visible with correct price', async ({ page }) => {
-    await expect(page.getByText('Fleet').first()).toBeVisible();
-    await expect(page.getByText('$199').first()).toBeVisible();
+    const pricing = page.locator('#pricing');
+    await expect(pricing.getByText('Fleet').first()).toBeVisible();
+    await expect(pricing.getByText('$199').first()).toBeVisible();
   });
 
   test('Starter plan description is visible', async ({ page }) => {
@@ -61,8 +65,10 @@ test.describe('Pricing section', () => {
     await expect(page.getByText('Sin límite de pedidos')).toBeVisible();
   });
 
-  test('all CTA buttons link to register', async ({ page }) => {
-    const ctaLinks = page.getByRole('link', { name: 'Empezar gratis' });
+  test('all plan CTA buttons in pricing section link to register', async ({ page }) => {
+    // Scope to #pricing section to avoid counting nav CTA
+    const pricing = page.locator('#pricing');
+    const ctaLinks = pricing.getByRole('link', { name: 'Empezar gratis' });
     // 4 plans × 1 CTA each
     await expect(ctaLinks).toHaveCount(4);
     for (const link of await ctaLinks.all()) {

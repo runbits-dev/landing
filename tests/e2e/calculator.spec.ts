@@ -48,28 +48,31 @@ test.describe('SavingsCalculator (React component)', () => {
     await expect(page.getByText('Rappi / PedidosYa (30%)')).toBeVisible();
   });
 
-  test('default calculation: $500/day → Starter plan at $49', async ({ page }) => {
+  test('default calculation: $500/day → Growth plan at $129', async ({ page }) => {
     // $500/day × 30 = $15,000/month → Growth plan ($129)
-    // Actually $500 × 30 = $15,000 → Growth ($129)
-    await expect(page.getByText('Plan Growth')).toBeVisible();
-    await expect(page.getByText('$129')).toBeVisible();
+    const calculator = page.locator('#calculator');
+    await expect(calculator.getByText('Plan Growth')).toBeVisible();
+    // Price inside calculator section (not pricing section)
+    await expect(calculator.locator('.text-2xl.font-bold.text-brand-700')).toContainText('$129');
   });
 
-  test('slider interaction updates values', async ({ page }) => {
+  test('slider interaction updates values to Starter plan', async ({ page }) => {
     const slider = page.locator('input[type="range"]');
-    // Set to minimum (50) → Starter plan
+    const calculator = page.locator('#calculator');
+    // Set to minimum (50) → $50 × 30 = $1,500 → Starter plan
     await slider.fill('50');
     await slider.dispatchEvent('input');
-    await expect(page.getByText('Plan Starter')).toBeVisible();
-    await expect(page.getByText('$49')).toBeVisible();
+    await expect(calculator.getByText('Plan Starter')).toBeVisible();
+    await expect(calculator.locator('.text-2xl.font-bold.text-brand-700')).toContainText('$49');
   });
 
   test('high value slider shows Pro plan', async ({ page }) => {
     const slider = page.locator('input[type="range"]');
+    const calculator = page.locator('#calculator');
     // $3000/day × 30 = $90,000 → Pro plan (max)
     await slider.fill('3000');
     await slider.dispatchEvent('input');
-    await expect(page.getByText('Plan Pro')).toBeVisible();
-    await expect(page.getByText('$299')).toBeVisible();
+    await expect(calculator.getByText('Plan Pro')).toBeVisible();
+    await expect(calculator.locator('.text-2xl.font-bold.text-brand-700')).toContainText('$299');
   });
 });
